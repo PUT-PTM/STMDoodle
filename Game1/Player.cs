@@ -14,7 +14,6 @@ namespace PTM
         float moveSpeed = 500;
         float jumpSpeed = 1500;
         bool jump = false;
-        bool change = false;
         Vector2 velocity;
         const float gravity = 40f;
         
@@ -35,6 +34,7 @@ namespace PTM
 
         public void Update(GameTime gameTime)
         {
+            
             keyState = Keyboard.GetState();
 
             czas = gameTime.TotalGameTime.ToString();
@@ -47,22 +47,22 @@ namespace PTM
             {
                 velocity.Y -= jumpSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 jump = false;
-                change = true;
+                wynik++;
             }
             if (!jump)
                 velocity.Y += gravity * (float)gameTime.ElapsedGameTime.TotalSeconds;
             else
                 velocity.Y = 0;
             position += velocity;
-            if (change == true)
-            {
-                change = false;
-                wynik++;
-            }
 
-            jump = position.Y >= 550;
-            if (jump)
-                position.Y = 550;
+
+            if( position.Y >= 600 - playerSprite.Height)
+            {
+                position.Y--;
+                jump = true;
+            }
+            //if (jump)
+                //position.Y = 550;
             
             CheckBorders();
         }
@@ -70,8 +70,8 @@ namespace PTM
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(playerSprite, position, Color.White);
-            spriteBatch.DrawString(font, "X: " + position.X.ToString() + " Y: " + position.Y.ToString()
-                + "\nJump: " + jump.ToString() + " Up: " + keyState.IsKeyDown(Keys.Up).ToString() + "\nWynik: " + wynik.ToString()
+            spriteBatch.DrawString(font, MyStaticValues.nazwa + " " + MyStaticValues.wersja + "\nX: " + position.X.ToString() + " Y: " + position.Y.ToString()
+                + "\nJump: " + jump.ToString() + " Up: " + keyState.IsKeyDown(Keys.Up).ToString() + "\nWynik: " + (wynik/2).ToString()
                 + "\nCzas: " + czas, Vector2.Zero, Color.White);
         }
 
@@ -81,10 +81,10 @@ namespace PTM
                 position.X = 0;
             if (position.Y < 0)
                 position.Y = 0;
-            if (position.X + playerSprite.Height > 800)
-                position.X = 800 - playerSprite.Height;
-            if (position.Y + playerSprite.Width > 600)
-                position.Y = 600 - playerSprite.Width;
+            if (position.X + playerSprite.Width > 800)
+                position.X = 800 - playerSprite.Width;
+            if (position.Y + playerSprite.Height > 600)
+                position.Y = 600 - playerSprite.Height;
         }
     }
 }
