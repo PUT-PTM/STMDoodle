@@ -56,13 +56,11 @@ namespace PTM
             position += velocity;
 
 
-            if( position.Y >= 600 - playerSprite.Height)
+            if( position.Y >= MyStaticValues.WinSize.Y - playerSprite.Height)
             {
                 position.Y--;
                 jump = true;
             }
-            //if (jump)
-                //position.Y = 550;
             
             CheckBorders();
         }
@@ -81,10 +79,10 @@ namespace PTM
                 position.X = 0;
             if (position.Y < 0)
                 position.Y = 0;
-            if (position.X + playerSprite.Width > 800)
-                position.X = 800 - playerSprite.Width;
-            if (position.Y + playerSprite.Height > 600)
-                position.Y = 600 - playerSprite.Height;
+            if (position.X + playerSprite.Width > MyStaticValues.WinSize.X)
+                position.X = MyStaticValues.WinSize.X - playerSprite.Width;
+            if (position.Y + playerSprite.Height > MyStaticValues.WinSize.Y)
+                position.Y = MyStaticValues.WinSize.Y - playerSprite.Height;
         }
     }
 }

@@ -44,7 +44,7 @@ namespace PTM
             this.position = position;
             if (text != String.Empty)
             {
-                font = content.Load<SpriteFont>("AnimationFont");
+                font = content.Load<SpriteFont>("SpriteFont1");
                 color = new Color(255,0,125);
             }
             if (image != null)

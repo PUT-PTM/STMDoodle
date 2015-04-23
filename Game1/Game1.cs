@@ -12,6 +12,7 @@ namespace PTM
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+
         Player player1;
         public Game1()
             : base()
@@ -34,8 +35,8 @@ namespace PTM
             ScreenManager.Instance.Dimensions = new Vector2(800, 600);
             */
             IsMouseVisible = true;
-            graphics.PreferredBackBufferWidth = 800;//(int)ScreenManager.Instance.Dimensions.X;
-            graphics.PreferredBackBufferHeight = 600;// (int)ScreenManager.Instance.Dimensions.Y;
+            graphics.PreferredBackBufferWidth = MyStaticValues.WinSize.X;//(int)ScreenManager.Instance.Dimensions.X;
+            graphics.PreferredBackBufferHeight = MyStaticValues.WinSize.Y;// (int)ScreenManager.Instance.Dimensions.Y;
             graphics.ApplyChanges();
             player1 = new Player();
             base.Initialize();
@@ -91,7 +92,7 @@ namespace PTM
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.DarkGreen);
+            GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
