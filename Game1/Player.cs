@@ -10,7 +10,7 @@ namespace PTM
         Texture2D playerSprite;
         SpriteFont font;
         Vector2 position;
-        Rectangle playerRect;
+        Rectangle playerRect = new Rectangle(0, 0, 50, 50);
         float moveSpeed = 500;
         float jumpSpeed = 1500;
         bool jump = false;
@@ -70,7 +70,7 @@ namespace PTM
             spriteBatch.Draw(playerSprite, position, Color.White);
             spriteBatch.DrawString(font, MyStaticValues.nazwa + " " + MyStaticValues.wersja + "\nX: " + position.X.ToString() + " Y: " + position.Y.ToString()
                 + "\nJump: " + jump.ToString() + " Up: " + keyState.IsKeyDown(Keys.Up).ToString() + "\nWynik: " + (wynik/2).ToString()
-                + "\nCzas: " + czas, Vector2.Zero, Color.White);
+                + "\nCzas: " + czas.ToString(), Vector2.Zero, Color.White);
         }
 
         private void CheckBorders()

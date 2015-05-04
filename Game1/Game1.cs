@@ -12,6 +12,9 @@ namespace PTM
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        Texture2D podlogaTexture;
+        Rectangle podlogaRectangle;
+
 
         Player player1;
         public Game1()
@@ -50,6 +53,11 @@ namespace PTM
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            podlogaTexture = Content.Load<Texture2D>("Sprites/podloga");
+            podlogaRectangle.X = 500;
+            podlogaRectangle.Y = 400;
+            podlogaRectangle.Width = 256;
+            podlogaRectangle.Height = 16;
             /*
              * ScreenManager.Instance.LoadContent(Content);
              * 
@@ -96,6 +104,7 @@ namespace PTM
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
+            spriteBatch.Draw(podlogaTexture, podlogaRectangle, new Rectangle(0, 0, 256, 16), Color.White);
             /*
             ScreenManager.Instance.Draw(spriteBatch);
              * 
