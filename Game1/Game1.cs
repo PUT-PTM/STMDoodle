@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace PTM
 {
@@ -11,9 +12,10 @@ namespace PTM
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-
+        
         Texture2D podlogaTexture;
         Rectangle podlogaRectangle;
+        Rectangle podlogaRectangle2;
 
 
         Player player1;
@@ -54,10 +56,16 @@ namespace PTM
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             podlogaTexture = Content.Load<Texture2D>("Sprites/podloga");
-            podlogaRectangle.X = 500;
-            podlogaRectangle.Y = 400;
+
             podlogaRectangle.Width = 256;
             podlogaRectangle.Height = 16;
+            podlogaRectangle2.Width = 256;
+            podlogaRectangle2.Height = 16;
+            Random Losowaczka = new Random();
+            podlogaRectangle.X = Losowaczka.Next(MyStaticValues.WinSize.X - podlogaRectangle.Width); ;
+            podlogaRectangle2.X = Losowaczka.Next(MyStaticValues.WinSize.X - podlogaRectangle.Width); ;
+            podlogaRectangle.Y = 400;
+            podlogaRectangle2.Y = 500;
             /*
              * ScreenManager.Instance.LoadContent(Content);
              * 
@@ -92,6 +100,7 @@ namespace PTM
              */
             player1.Update(gameTime);
             base.Update(gameTime);
+            
         }
 
         /// <summary>
@@ -105,6 +114,7 @@ namespace PTM
             // TODO: Add your drawing code here
             spriteBatch.Begin();
             spriteBatch.Draw(podlogaTexture, podlogaRectangle, new Rectangle(0, 0, 256, 16), Color.White);
+            spriteBatch.Draw(podlogaTexture, podlogaRectangle2, new Rectangle(0, 0, 256, 16), Color.White);
             /*
             ScreenManager.Instance.Draw(spriteBatch);
              * 
