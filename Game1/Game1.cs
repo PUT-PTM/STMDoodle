@@ -1,14 +1,14 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
 
 namespace PTM
 {
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class Game1 : Game
+    public class STMDoodle : Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -16,14 +16,17 @@ namespace PTM
         Texture2D podlogaTexture;
         Rectangle podlogaRectangle;
         Rectangle podlogaRectangle2;
+        bool przecinanie;
 
+        Texture2D test;
 
         Player player1;
-        public Game1()
+        public STMDoodle()
             : base()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            
         }
 
         /// <summary>
@@ -44,6 +47,8 @@ namespace PTM
             graphics.PreferredBackBufferHeight = MyStaticValues.WinSize.Y;// (int)ScreenManager.Instance.Dimensions.Y;
             graphics.ApplyChanges();
             player1 = new Player();
+            test = new Texture2D(GraphicsDevice, 1, 1);
+            test.SetData(new[] { Color.White });
             base.Initialize();
         }
 
@@ -110,7 +115,6 @@ namespace PTM
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-
             // TODO: Add your drawing code here
             spriteBatch.Begin();
             spriteBatch.Draw(podlogaTexture, podlogaRectangle, new Rectangle(0, 0, 256, 16), Color.White);
@@ -119,6 +123,15 @@ namespace PTM
             ScreenManager.Instance.Draw(spriteBatch);
              * 
              */
+            int bw = 2; // Border width
+
+            spriteBatch.Draw(test, new Rectangle(podlogaRectangle.Left, podlogaRectangle.Top, bw, podlogaRectangle.Height), Color.Yellow); // Left
+            spriteBatch.Draw(test, new Rectangle(podlogaRectangle.Right, podlogaRectangle.Top, bw, podlogaRectangle.Height), Color.Yellow); // Right
+            spriteBatch.Draw(test, new Rectangle(podlogaRectangle.Left, podlogaRectangle.Top, podlogaRectangle.Width, bw), Color.Yellow); // Top
+            spriteBatch.Draw(test, new Rectangle(podlogaRectangle.Left, podlogaRectangle.Bottom, podlogaRectangle.Width, bw), Color.Yellow); // B
+
+            przecinanie = player1.playerRect.Intersects(podlogaRectangle);
+
             player1.Draw(spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);
