@@ -1,6 +1,4 @@
-﻿using System;
-
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -71,8 +69,8 @@ namespace PTM
         }
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(podlogaTexture, podlogaRectangle, Color.White);
-            spriteBatch.Draw(podlogaTexture, podlogaRectangle2, Color.White);
+            spriteBatch.Draw(podlogaTexture, new Vector2(podlogaRectangle.X, podlogaRectangle.Y), podlogaRectangle, Color.White, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+            spriteBatch.Draw(podlogaTexture, new Vector2(podlogaRectangle2.X, podlogaRectangle2.Y), podlogaRectangle2, Color.White, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
 
             /*
             int bw = 2; // Border width

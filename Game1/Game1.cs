@@ -104,7 +104,7 @@ namespace PTM
         {
             GraphicsDevice.Clear(Color.Black);
             // TODO: Add your drawing code here
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.LinearWrap, null, null);
             
             /*
             ScreenManager.Instance.Draw(spriteBatch);
