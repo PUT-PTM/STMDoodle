@@ -15,20 +15,21 @@ namespace PTM
         Vector2 position;
         public Rectangle playerRect;
         float moveSpeed = 500;
-        float jumpSpeed = 1000;
+        float jumpSpeed = 1200;
         bool jump = false;
         Vector2 velocity;
         const float gravity = 40f;
         Vector2 positionBefore;
         bool opadanie = false;
         bool inter = false;
+
         
         int wynik = 0;
         string czas;
 
-        public Rectangle Position
+        public Vector2 Position
         {
-            get { return playerRect; }
+            get { return position; }
         } 
         public bool Opada
         { get { return opadanie; } }
@@ -36,7 +37,8 @@ namespace PTM
         KeyboardState keyState;
         public void Initialize()
         {
-            position = velocity = Vector2.Zero;
+            position = new Vector2((MyStaticValues.WinSize.X - 200), (MyStaticValues.WinSize.Y - 200));
+            velocity = Vector2.Zero;
             blok = new Block();
             blok.Initialize();
         }
@@ -54,7 +56,7 @@ namespace PTM
 
         public void Update(GameTime gameTime)
         {
-            blok.Update(gameTime);
+            blok.Update(gameTime,position);
 
             positionBefore = position;
             keyState = Keyboard.GetState();
@@ -96,7 +98,14 @@ namespace PTM
             #region colision
             CheckBorders();
 
-
+            if (playerRect.Intersects(blok.Podloga3) && opadanie || playerRect.Intersects(blok.Podloga3) && !jump)
+            {
+                position.Y = blok.Podloga3.Y - playerSprite.Height;
+                inter = true;
+                jump = true;
+            }
+            else
+                inter = false;
 
             if (playerRect.Intersects(blok.Podloga2) && opadanie || playerRect.Intersects(blok.Podloga2) && !jump)
             {
@@ -106,7 +115,7 @@ namespace PTM
             }
             else
                 inter = false;
-            if (playerRect.Intersects(blok.Podloga1) && opadanie)
+            if (playerRect.Intersects(blok.Podloga1) && opadanie || playerRect.Intersects(blok.Podloga1) && !jump)
             {
                 position.Y = blok.Podloga1.Y - playerSprite.Height;
                 inter = true;
@@ -134,8 +143,6 @@ namespace PTM
         {
             if (position.X < 0)
                 position.X = 0;
-            if (position.Y < 0)
-                position.Y = 0;
             if (position.X + playerSprite.Width > MyStaticValues.WinSize.X)
                 position.X = MyStaticValues.WinSize.X - playerSprite.Width;
             if (position.Y + playerSprite.Height > MyStaticValues.WinSize.Y)

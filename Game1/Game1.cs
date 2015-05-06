@@ -15,7 +15,9 @@ namespace PTM
         
 
         
-        Player player1;
+        Player player;
+
+        Camera camera = new Camera();
         public STMDoodle()
             : base()
         {
@@ -41,8 +43,8 @@ namespace PTM
             graphics.PreferredBackBufferWidth = MyStaticValues.WinSize.X;//(int)ScreenManager.Instance.Dimensions.X;
             graphics.PreferredBackBufferHeight = MyStaticValues.WinSize.Y;// (int)ScreenManager.Instance.Dimensions.Y;
             graphics.ApplyChanges();
-            player1 = new Player();
-            player1.Initialize();
+            player = new Player();
+            player.Initialize();
            
             base.Initialize();
         }
@@ -60,7 +62,7 @@ namespace PTM
              * ScreenManager.Instance.LoadContent(Content);
              * 
              * */
-            player1.LoadContent(Content);
+            player.LoadContent(Content);
             // TODO: use this.Content to load your game content here
         }
 
@@ -91,7 +93,8 @@ namespace PTM
 
             
             
-            player1.Update(gameTime);
+            player.Update(gameTime);
+            camera.Update(player.Position);
             base.Update(gameTime);
             
         }
@@ -104,7 +107,8 @@ namespace PTM
         {
             GraphicsDevice.Clear(Color.Black);
             // TODO: Add your drawing code here
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend,
+                null,null,null,null, camera.ViewMatrix);
             
             /*
             ScreenManager.Instance.Draw(spriteBatch);
@@ -112,7 +116,7 @@ namespace PTM
              */
             
 
-            player1.Draw(spriteBatch);
+            player.Draw(spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);
         }
