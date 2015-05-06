@@ -12,6 +12,7 @@ namespace PTM
     /// </summary>
     public static class Program
     {
+        public static Random Losowaczka = new Random();
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
