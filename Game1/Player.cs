@@ -12,6 +12,7 @@ namespace PTM
         Texture2D podlogaTexture;
         Vector2 maxPosition;
         bool koniecGry = false;
+        // TODO double frameRate;
 
         Block blok;
 
@@ -43,7 +44,7 @@ namespace PTM
         KeyboardState keyState;
         public void Initialize()
         {
-            for (int i = 0; i < 10600; i++)
+            for (int i = 0; i < 600; i++)
             {
                 Krawedz k = new Krawedz();
                 k.prostokat.Y += (i * -200) + (MyStaticValues.WinSize.Y - 50);
@@ -69,13 +70,16 @@ namespace PTM
 
         public void Update(GameTime gameTime)
         {
+
+
             blok.Update(gameTime,position);
             if (position.Y < maxPosition.Y)
             { 
                 maxPosition = position;
+                maxPosition.X = 0;
             }
             else
-                if (maxPosition.Y + 1000 < position.Y)
+                if (maxPosition.Y + 700 < position.Y)
                 {
                     koniecGry = true;
                 }
@@ -92,9 +96,9 @@ namespace PTM
                 position.X += moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
             else if (keyState.IsKeyDown(Keys.Left))
                 position.X -= moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            if (keyState.IsKeyDown(Keys.Up) && jump)
+            if (jump)
             {
-                //velocity = Vector2.Zero;
+                velocity = Vector2.Zero;
                 velocity.Y -= jumpSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 jump = false;
                 wynik++;
@@ -111,7 +115,6 @@ namespace PTM
 
             if( position.Y >= MyStaticValues.WinSize.Y - playerSprite.Height)
             {
-                //position.Y--;
                 jump = true;
             }
 
@@ -123,7 +126,7 @@ namespace PTM
 
             foreach (Krawedz k in listaKrawedzi)
             {
-                if (playerRect.Intersects(k.prostokat) && opadanie || playerRect.Intersects(k.prostokat) && !jump)
+                if (playerRect.Intersects(k.prostokat) && opadanie)
                 {
                     position.Y = k.prostokat.Y - playerSprite.Height;
                     inter = true;
@@ -131,38 +134,7 @@ namespace PTM
                 }
                 else
                     inter = false;
-            }
-
-            
-            /*
-            if (playerRect.Intersects(blok.Podloga3) && opadanie || playerRect.Intersects(blok.Podloga3) && !jump)
-            {
-                position.Y = blok.Podloga3.Y - playerSprite.Height;
-                inter = true;
-                jump = true;
-            }
-            else
-                inter = false;
-
-            if (playerRect.Intersects(blok.Podloga2) && opadanie || playerRect.Intersects(blok.Podloga2) && !jump)
-            {
-                position.Y = blok.Podloga2.Y - playerSprite.Height;
-                inter = true;
-                jump = true;
-            }
-            else
-                inter = false;
-            if (playerRect.Intersects(blok.Podloga1) && opadanie || playerRect.Intersects(blok.Podloga1) && !jump)
-            {
-                position.Y = blok.Podloga1.Y - playerSprite.Height;
-                inter = true;
-                jump = true;
-            }
-            else
-                inter = false;
-
-            */
-                
+            }               
             #endregion
 
         }
@@ -173,12 +145,24 @@ namespace PTM
             {
                 spriteBatch.Draw(podlogaTexture, k.prostokat, Color.White);
             }
-            //blok.Draw(spriteBatch);
             spriteBatch.Draw(playerSprite, position, Color.White);
-            spriteBatch.DrawString(font, MyStaticValues.nazwa + " " + MyStaticValues.wersja + "\nX: " + position.X.ToString() + " Y: " + position.Y.ToString()
-                + "\nJump: " + jump.ToString() + " Up: " + keyState.IsKeyDown(Keys.Up).ToString() + "\nWynik: " + (wynik/2).ToString()
-                + "\nCzas: " + czas.ToString() + "\nOpadanie: " + opadanie.ToString() + "\n intersect: " + inter.ToString() + "Koniec: "
-                + koniecGry.ToString(), new Vector2(0,position.Y-200), Color.White);
+            spriteBatch.DrawString(font,
+                MyStaticValues.nazwa + " " +
+                MyStaticValues.wersja.ToString().Replace(',', '.') + "\nX: " +
+                position.X.ToString() + " Y: " +
+                position.Y.ToString() +
+                "\nJump: " + jump.ToString() +
+                " Up: " + keyState.IsKeyDown(Keys.Up).ToString() +
+                "\nWynik: " + ((maxPosition.Y - 2*maxPosition.Y)/100).ToString() +
+                "\nCzas: " + czas.ToString() +
+                "\nOpadanie: " + opadanie.ToString() +
+                "\nIntersect: " + inter.ToString() +
+                "\nKoniec: " + koniecGry.ToString(), maxPosition + new Vector2(0, - 100), Color.White);
+            if (koniecGry == true)
+            {
+                spriteBatch.DrawString(font, "Koniec gry", (maxPosition + new Vector2(0, -300)), Color.Yellow);
+            }
+
         }
 
         private void CheckBorders()
@@ -192,7 +176,6 @@ namespace PTM
             if (positionBefore.Y < position.Y)
                 opadanie = true;
             else opadanie = false;
-
-        }
+            }
     }
 }

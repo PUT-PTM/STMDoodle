@@ -39,7 +39,6 @@ namespace PTM
             ScreenManager.Instance.Initialize();
             ScreenManager.Instance.Dimensions = new Vector2(800, 600);
             */
-            IsMouseVisible = true;
             graphics.PreferredBackBufferWidth = MyStaticValues.WinSize.X;//(int)ScreenManager.Instance.Dimensions.X;
             graphics.PreferredBackBufferHeight = MyStaticValues.WinSize.Y;// (int)ScreenManager.Instance.Dimensions.Y;
             graphics.ApplyChanges();

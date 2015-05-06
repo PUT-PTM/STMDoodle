@@ -6,7 +6,6 @@ namespace PTM
     {
         int szerokosc = 256;
         int wysokosc = 16;
-        float opadanie = 100;
         public Rectangle prostokat;
 
         public Krawedz()
