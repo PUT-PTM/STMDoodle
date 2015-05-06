@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -7,6 +8,11 @@ namespace PTM
 {
     class Player
     {
+        List<Krawedz> listaKrawedzi = new List<Krawedz>();
+        Texture2D podlogaTexture;
+        Vector2 maxPosition;
+        bool koniecGry = false;
+
         Block blok;
 
         ContentManager content;
@@ -37,6 +43,12 @@ namespace PTM
         KeyboardState keyState;
         public void Initialize()
         {
+            for (int i = 0; i < 10600; i++)
+            {
+                Krawedz k = new Krawedz();
+                k.prostokat.Y += (i * -200) + (MyStaticValues.WinSize.Y - 50);
+                listaKrawedzi.Add(k);
+            }
             position = new Vector2((MyStaticValues.WinSize.X - 200), (MyStaticValues.WinSize.Y - 200));
             velocity = Vector2.Zero;
             blok = new Block();
@@ -50,6 +62,7 @@ namespace PTM
             blok.LoadContent(Content);
             playerSprite = content.Load<Texture2D>("PlayerSprite");
             font = content.Load<SpriteFont>("SpriteFont1");
+            podlogaTexture = content.Load<Texture2D>("Sprites/podloga");
             
             
         }
@@ -57,6 +70,16 @@ namespace PTM
         public void Update(GameTime gameTime)
         {
             blok.Update(gameTime,position);
+            if (position.Y < maxPosition.Y)
+            { 
+                maxPosition = position;
+            }
+            else
+                if (maxPosition.Y + 1000 < position.Y)
+                {
+                    koniecGry = true;
+                }
+
 
             positionBefore = position;
             keyState = Keyboard.GetState();
@@ -71,7 +94,7 @@ namespace PTM
                 position.X -= moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (keyState.IsKeyDown(Keys.Up) && jump)
             {
-                velocity = Vector2.Zero;
+                //velocity = Vector2.Zero;
                 velocity.Y -= jumpSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 jump = false;
                 wynik++;
@@ -98,6 +121,20 @@ namespace PTM
             #region colision
             CheckBorders();
 
+            foreach (Krawedz k in listaKrawedzi)
+            {
+                if (playerRect.Intersects(k.prostokat) && opadanie || playerRect.Intersects(k.prostokat) && !jump)
+                {
+                    position.Y = k.prostokat.Y - playerSprite.Height;
+                    inter = true;
+                    jump = true;
+                }
+                else
+                    inter = false;
+            }
+
+            
+            /*
             if (playerRect.Intersects(blok.Podloga3) && opadanie || playerRect.Intersects(blok.Podloga3) && !jump)
             {
                 position.Y = blok.Podloga3.Y - playerSprite.Height;
@@ -124,7 +161,7 @@ namespace PTM
             else
                 inter = false;
 
-
+            */
                 
             #endregion
 
@@ -132,11 +169,16 @@ namespace PTM
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            blok.Draw(spriteBatch);
+            foreach (Krawedz k in listaKrawedzi)
+            {
+                spriteBatch.Draw(podlogaTexture, k.prostokat, Color.White);
+            }
+            //blok.Draw(spriteBatch);
             spriteBatch.Draw(playerSprite, position, Color.White);
             spriteBatch.DrawString(font, MyStaticValues.nazwa + " " + MyStaticValues.wersja + "\nX: " + position.X.ToString() + " Y: " + position.Y.ToString()
                 + "\nJump: " + jump.ToString() + " Up: " + keyState.IsKeyDown(Keys.Up).ToString() + "\nWynik: " + (wynik/2).ToString()
-                + "\nCzas: " + czas.ToString() + "\nOpadanie: " + opadanie.ToString() + "\n intersect: " + inter.ToString(), Vector2.Zero, Color.White);
+                + "\nCzas: " + czas.ToString() + "\nOpadanie: " + opadanie.ToString() + "\n intersect: " + inter.ToString() + "Koniec: "
+                + koniecGry.ToString(), new Vector2(0,position.Y-200), Color.White);
         }
 
         private void CheckBorders()

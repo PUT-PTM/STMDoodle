@@ -65,7 +65,7 @@ namespace PTM
             rect1Y += (int)(przewijanie * (float)gameTime.ElapsedGameTime.TotalSeconds);
             if (rect1Y >= playerPosition.Y + MyStaticValues.WinSize.Y /2)
             {
-                rect1Y = rect3Y - 200;
+                rect1Y = rect3Y - 400;
                 rect1X = Program.Losowaczka.Next(MyStaticValues.WinSize.X - rectangleWidth);
             }
             podlogaRectangle = new Rectangle(rect1X, rect1Y, rectangleWidth, rectangleHeight);
