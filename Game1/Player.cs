@@ -9,12 +9,13 @@ namespace PTM
     class Player
     {
         List<Krawedz> listaKrawedzi = new List<Krawedz>();
+        List<Krawedz> listaKrawedziDoUsuniecia = new List<Krawedz>();
         Texture2D podlogaTexture;
         Vector2 maxPosition;
         bool koniecGry = false;
+        int dlugoscListy;
+        Krawedz badanaKrawedz;
         // TODO double frameRate;
-
-        Block blok;
 
         ContentManager content;
         Texture2D playerSprite;
@@ -52,15 +53,12 @@ namespace PTM
             }
             position = new Vector2((MyStaticValues.WinSize.X - 200), (MyStaticValues.WinSize.Y - 200));
             velocity = Vector2.Zero;
-            blok = new Block();
-            blok.Initialize();
         }
 
         public void LoadContent(ContentManager Content)
         {
             
             content = new ContentManager(Content.ServiceProvider, "Content");
-            blok.LoadContent(Content);
             playerSprite = content.Load<Texture2D>("PlayerSprite");
             font = content.Load<SpriteFont>("SpriteFont1");
             podlogaTexture = content.Load<Texture2D>("Sprites/podloga");
@@ -70,9 +68,6 @@ namespace PTM
 
         public void Update(GameTime gameTime)
         {
-
-
-            blok.Update(gameTime,position);
             if (position.Y < maxPosition.Y)
             { 
                 maxPosition = position;
@@ -137,6 +132,19 @@ namespace PTM
             }               
             #endregion
 
+            dlugoscListy = listaKrawedzi.Count;
+            foreach (Krawedz k in listaKrawedziDoUsuniecia)
+            {
+                for (int i = 0; i < dlugoscListy - 1; i++)
+                {
+                    badanaKrawedz = listaKrawedzi[i];
+                    if (k == badanaKrawedz)
+                    {
+                        listaKrawedzi.Remove(k);
+                    }
+                }
+            }
+            listaKrawedziDoUsuniecia.RemoveRange(0, listaKrawedziDoUsuniecia.Count);
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -144,7 +152,10 @@ namespace PTM
             foreach (Krawedz k in listaKrawedzi)
             {
                 spriteBatch.Draw(podlogaTexture, k.prostokat, Color.White);
+                if (k.prostokat.Y > maxPosition.Y + 1000)
+                    listaKrawedziDoUsuniecia.Add(k);
             }
+            
             spriteBatch.Draw(playerSprite, position, Color.White);
             spriteBatch.DrawString(font,
                 MyStaticValues.nazwa + " " +
