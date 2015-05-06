@@ -15,7 +15,7 @@ namespace PTM
         Vector2 position;
         public Rectangle playerRect;
         float moveSpeed = 500;
-        float jumpSpeed = 1500;
+        float jumpSpeed = 1000;
         bool jump = false;
         Vector2 velocity;
         const float gravity = 40f;
@@ -37,18 +37,15 @@ namespace PTM
         public void Initialize()
         {
             position = velocity = Vector2.Zero;
-           
-            
-            
-            
+            blok = new Block();
+            blok.Initialize();
         }
 
         public void LoadContent(ContentManager Content)
         {
-            blok = new Block();
+            
             content = new ContentManager(Content.ServiceProvider, "Content");
             blok.LoadContent(Content);
-            blok.Initialize();
             playerSprite = content.Load<Texture2D>("PlayerSprite");
             font = content.Load<SpriteFont>("SpriteFont1");
             
@@ -57,10 +54,14 @@ namespace PTM
 
         public void Update(GameTime gameTime)
         {
+            blok.Update(gameTime);
+
             positionBefore = position;
             keyState = Keyboard.GetState();
 
             czas = gameTime.TotalGameTime.ToString();
+
+            
 
             if (keyState.IsKeyDown(Keys.Right))
                 position.X += moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -68,6 +69,7 @@ namespace PTM
                 position.X -= moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (keyState.IsKeyDown(Keys.Up) && jump)
             {
+                velocity = Vector2.Zero;
                 velocity.Y -= jumpSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 jump = false;
                 wynik++;
@@ -75,7 +77,10 @@ namespace PTM
             if (!jump)
                 velocity.Y += gravity * (float)gameTime.ElapsedGameTime.TotalSeconds;
             else
-                velocity.Y = 0;
+            {
+                velocity.Y = 100 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                opadanie = false;
+            }
             position += velocity;
 
 
@@ -93,7 +98,7 @@ namespace PTM
 
 
 
-            if (playerRect.Intersects(blok.Podloga2) && opadanie)
+            if (playerRect.Intersects(blok.Podloga2) && opadanie || playerRect.Intersects(blok.Podloga2) && !jump)
             {
                 position.Y = blok.Podloga2.Y - playerSprite.Height;
                 inter = true;

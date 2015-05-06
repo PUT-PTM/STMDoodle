@@ -42,6 +42,7 @@ namespace PTM
             graphics.PreferredBackBufferHeight = MyStaticValues.WinSize.Y;// (int)ScreenManager.Instance.Dimensions.Y;
             graphics.ApplyChanges();
             player1 = new Player();
+            player1.Initialize();
            
             base.Initialize();
         }
