@@ -10,7 +10,6 @@ namespace PTM
         bool increase;
         float fadespeed;
         TimeSpan defaultTime, timer;
-        bool startTimer;
         float activateValue;
         bool stopUpdating;
         float defaultAlpha;

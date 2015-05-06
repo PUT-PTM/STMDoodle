@@ -8,6 +8,7 @@ namespace PTM
 {
     class Player
     {
+        #region Variables
         List<Krawedz> listaKrawedzi = new List<Krawedz>();
         List<Krawedz> listaKrawedziDoUsuniecia = new List<Krawedz>();
         Texture2D podlogaTexture;
@@ -17,6 +18,7 @@ namespace PTM
         Krawedz badanaKrawedz;
         // TODO double frameRate;
 
+        KeyboardState keyState;
         ContentManager content;
         Texture2D playerSprite;
         SpriteFont font;
@@ -33,16 +35,21 @@ namespace PTM
 
         
         int wynik = 0;
-        string czas;
-
+        string czas = "0";
+        #endregion
+        #region Properties
+        public bool Koniecgry
+        { 
+            get { return koniecGry; } 
+        }
         public Vector2 Position
         {
             get { return position; }
         } 
         public bool Opada
         { get { return opadanie; } }
-
-        KeyboardState keyState;
+        #endregion
+        
         public void Initialize()
         {
             for (int i = 0; i < 600; i++)
@@ -85,7 +92,7 @@ namespace PTM
 
             czas = gameTime.TotalGameTime.ToString();
 
-            
+            #region Sterowanie
 
             if (keyState.IsKeyDown(Keys.Right))
                 position.X += moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -112,7 +119,7 @@ namespace PTM
             {
                 jump = true;
             }
-
+            #endregion
             playerRect = new Rectangle((int)position.X, (int)position.Y, playerSprite.Width, playerSprite.Height);
             
             
@@ -131,7 +138,7 @@ namespace PTM
                     inter = false;
             }               
             #endregion
-
+            #region Rysowanie bloków
             dlugoscListy = listaKrawedzi.Count;
             foreach (Krawedz k in listaKrawedziDoUsuniecia)
             {
@@ -145,6 +152,7 @@ namespace PTM
                 }
             }
             listaKrawedziDoUsuniecia.RemoveRange(0, listaKrawedziDoUsuniecia.Count);
+            #endregion
         }
 
         public void Draw(SpriteBatch spriteBatch)

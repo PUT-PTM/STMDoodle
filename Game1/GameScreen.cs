@@ -12,6 +12,7 @@ namespace PTM
     public class GameScreen
     {
         protected ContentManager content;
+        public virtual void Initialize() { }
         public virtual void LoadContent(ContentManager Content)
         {
             content = new ContentManager(Content.ServiceProvider, "Content");

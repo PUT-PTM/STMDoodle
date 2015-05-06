@@ -14,6 +14,10 @@ namespace PTM
         KeyboardState keyState;
         SpriteFont font;
 
+        public override void Initialize()
+        {
+            base.Initialize();
+        }
         public override void LoadContent(ContentManager Content)
         {
             base.LoadContent(Content);
@@ -27,12 +31,17 @@ namespace PTM
         public override void Update(GameTime gameTime)
         {
             keyState = Keyboard.GetState();
-            if (keyState.IsKeyDown(Keys.Enter))
-                ScreenManager.Instance.AddScreen(new SplashScreen());
+            if (keyState.IsKeyDown(Keys.Enter) || keyState.IsKeyDown(Keys.Space))
+                ScreenManager.Instance.AddScreen(new PlayScreen());
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawString(font, "TitleScreen", new Vector2(100, 100), Color.Cyan);
+            spriteBatch.DrawString(font, "STM DOODLE", 
+                new Vector2(MyStaticValues.WinSize.X / 2 - (int)font.MeasureString("STM Doodle").X / 2,
+                    MyStaticValues.WinSize.Y / 2 - (int)font.MeasureString("STM Doodle").Y / 2), Color.Cyan);
+            spriteBatch.DrawString(font, "To Play Press Enter",
+                new Vector2(MyStaticValues.WinSize.X / 2 - (int)font.MeasureString("To Play Press Enter").X / 2,
+                    MyStaticValues.WinSize.Y / 2 + 100 - (int)font.MeasureString("To Play Press Enter").Y / 2), Color.YellowGreen);
             base.Draw(spriteBatch);
         }
     }

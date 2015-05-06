@@ -9,16 +9,24 @@ using Microsoft.Xna.Framework.Input;
 
 namespace PTM
 {
-    public class SplashScreen : GameScreen
+    public class PlayScreen : GameScreen
     {
         KeyboardState keyState;
         SpriteFont font;
 
+        Player player = new Player();
+        Camera camera = new Camera();
+        
+        public override void Initialize()
+        {
+            player.Initialize();
+        }
         public override void LoadContent(ContentManager Content)
         {
             base.LoadContent(Content);
             if (font == null)
                 font = content.Load<SpriteFont>("SpriteFont1");
+            player.LoadContent(content);
         }
         public override void UnloadContent()
         {
@@ -27,13 +35,25 @@ namespace PTM
         public override void Update(GameTime gameTime)
         {
             keyState = Keyboard.GetState();
-            if (keyState.IsKeyDown(Keys.Z))
+
+            player.Update(gameTime);
+            camera.Update(player.Position);
+
+            if (player.Koniecgry)
                 ScreenManager.Instance.AddScreen(new TitleScreen());
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawString(font, "SplashScreen", new Vector2(100, 100), Color.HotPink);
+            spriteBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend,
+                null, null, null, null, camera.ViewMatrix);
+
+            player.Draw(spriteBatch);
+
+
             base.Draw(spriteBatch);
+            spriteBatch.End();
+            spriteBatch.Begin();
         }
     }
 }

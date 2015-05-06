@@ -63,7 +63,8 @@ namespace PTM
         }
         public  void Initialize()
         {
-            currentScreen = new SplashScreen();
+            currentScreen = new TitleScreen();
+            currentScreen.Initialize();
             fade = new FadeAnimation();
         }
         public void LoadContent(ContentManager Content)
@@ -74,6 +75,7 @@ namespace PTM
             fadeTexture = content.Load<Texture2D>("fade");
             fade.LoadContent(content, fadeTexture, "", Vector2.Zero);
             fade.Scale = dimensions.X;
+            fade.FadeSpeed = 4.0f;
         }
         public void Update(GameTime gameTime) 
         {
@@ -100,6 +102,7 @@ namespace PTM
                 currentScreen.UnloadContent();
                 currentScreen = newScreen;
                 currentScreen.LoadContent(content);
+                currentScreen.Initialize();
             }
             else if (fade.Alpha == 0.0f)
             {

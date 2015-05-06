@@ -14,10 +14,6 @@ namespace PTM
         SpriteBatch spriteBatch;
         
 
-        
-        Player player;
-
-        Camera camera = new Camera();
         public STMDoodle()
             : base()
         {
@@ -35,15 +31,14 @@ namespace PTM
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            /*
+            
             ScreenManager.Instance.Initialize();
-            ScreenManager.Instance.Dimensions = new Vector2(800, 600);
-            */
+            ScreenManager.Instance.Dimensions = new Vector2(MyStaticValues.WinSize.X, MyStaticValues.WinSize.Y);
+            
             graphics.PreferredBackBufferWidth = MyStaticValues.WinSize.X;//(int)ScreenManager.Instance.Dimensions.X;
             graphics.PreferredBackBufferHeight = MyStaticValues.WinSize.Y;// (int)ScreenManager.Instance.Dimensions.Y;
             graphics.ApplyChanges();
-            player = new Player();
-            player.Initialize();
+           
            
             base.Initialize();
         }
@@ -56,12 +51,11 @@ namespace PTM
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-           
-            /*
-             * ScreenManager.Instance.LoadContent(Content);
-             * 
-             * */
-            player.LoadContent(Content);
+
+            IsMouseVisible = true;
+             ScreenManager.Instance.LoadContent(Content);
+             
+            
             // TODO: use this.Content to load your game content here
         }
 
@@ -85,15 +79,13 @@ namespace PTM
                 Exit();
             
             // TODO: Add your update logic here
-            /*
-             * ScreenManager.Instance.Update(gameTime);
-             * 
-             */
+            
+            ScreenManager.Instance.Update(gameTime);
+             
 
             
             
-            player.Update(gameTime);
-            camera.Update(player.Position);
+            
             base.Update(gameTime);
             
         }
@@ -106,18 +98,15 @@ namespace PTM
         {
             GraphicsDevice.Clear(Color.Black);
             // TODO: Add your drawing code here
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend,
-                null,null,null,null, camera.ViewMatrix);
-            
-            /*
-            ScreenManager.Instance.Draw(spriteBatch);
-             * 
-             */
+           
+            spriteBatch.Begin();
             
 
-            player.Draw(spriteBatch);
-            spriteBatch.End();
+            ScreenManager.Instance.Draw(spriteBatch);
+            
+            
             base.Draw(gameTime);
+            spriteBatch.End();
         }
     }
 }
