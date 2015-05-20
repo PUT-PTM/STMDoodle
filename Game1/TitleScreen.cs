@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace PTM
@@ -36,12 +32,18 @@ namespace PTM
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawString(font, "STM DOODLE", 
-                new Vector2(MyStaticValues.WinSize.X / 2 - (int)font.MeasureString("STM Doodle").X / 2,
+            spriteBatch.DrawString(font, "STM DOODLE " + MyStaticValues.wersja.ToString().Replace(',','.'), 
+                new Vector2(MyStaticValues.WinSize.X / 2 - (int)font.MeasureString("STM Doodle x.xx").X / 2,
                     MyStaticValues.WinSize.Y / 2 - (int)font.MeasureString("STM Doodle").Y / 2), Color.Cyan);
             spriteBatch.DrawString(font, "To Play Press Enter",
                 new Vector2(MyStaticValues.WinSize.X / 2 - (int)font.MeasureString("To Play Press Enter").X / 2,
                     MyStaticValues.WinSize.Y / 2 + 100 - (int)font.MeasureString("To Play Press Enter").Y / 2), Color.YellowGreen);
+            spriteBatch.DrawString(font, "Piotr Nowak\nDamian Rusin",
+                new Vector2(MyStaticValues.WinSize.X / 2 - (int)font.MeasureString("Piotr Nowak").X / 2,
+                    MyStaticValues.WinSize.Y / 2 + 200 - (int)font.MeasureString("Piotr Nowak").Y / 2), Color.PapayaWhip);
+            spriteBatch.DrawString(font, "2015",
+                new Vector2(MyStaticValues.WinSize.X / 2 - (int)font.MeasureString("Piotr Nowak").X / 2,
+                    MyStaticValues.WinSize.Y / 2 + 275 - (int)font.MeasureString("Piotr Nowak").Y / 2), Color.PapayaWhip);
             base.Draw(spriteBatch);
         }
     }

@@ -43,11 +43,13 @@
     <Compile Include="FadeAnimation.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="GameScreen.cs" />
-    <Compile Include="Krawedz.cs" />
-    <Compile Include="MyStaticValues.cs" />
+    <Compile Include="Klasy\Krawedz.cs" />
+    <Compile Include="Klasy\ListaWynikow.cs" />
+    <Compile Include="Klasy\MyStaticValues.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScoreScreen.cs" />
     <Compile Include="ScreenManager.cs" />
     <Compile Include="PlayScreen.cs" />
     <Compile Include="TitleScreen.cs" />

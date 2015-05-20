@@ -1,14 +1,15 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 namespace PTM
 {
     class Player
     {
         #region Variables
+        public int Wynik { get { return wynik; } }
         List<Krawedz> listaKrawedzi = new List<Krawedz>();
         List<Krawedz> listaKrawedziDoUsuniecia = new List<Krawedz>();
         Texture2D podlogaTexture;
@@ -58,6 +59,13 @@ namespace PTM
                 k.prostokat.Y += (i * -200) + (MyStaticValues.WinSize.Y - 50);
                 listaKrawedzi.Add(k);
             }
+            for (int i = 0; i < 599; i++)
+            {
+                if ((listaKrawedzi[i].prostokat.X - listaKrawedzi[i+1].prostokat.X) > 600 || (listaKrawedzi[i].prostokat.X - listaKrawedzi[i+1].prostokat.X) < -600)
+                {
+                    listaKrawedzi[i+1].zepsuty = true;
+                }
+            }
             position = new Vector2((MyStaticValues.WinSize.X - 200), (MyStaticValues.WinSize.Y - 200));
             velocity = Vector2.Zero;
         }
@@ -75,6 +83,18 @@ namespace PTM
 
         public void Update(GameTime gameTime)
         {
+            foreach (Krawedz k in listaKrawedzi)
+            {
+                if (k.ruchoma == true)
+                {
+                    k.prostokat.X += 1;
+                }
+
+            }
+
+
+
+
             if (position.Y < maxPosition.Y)
             { 
                 maxPosition = position;
@@ -93,6 +113,9 @@ namespace PTM
             czas = gameTime.TotalGameTime.ToString();
 
             #region Sterowanie
+
+            if (keyState.IsKeyDown(Keys.Enter) || keyState.IsKeyDown(Keys.Space))
+                ScreenManager.Instance.AddScreen(new PlayScreen());
 
             if (keyState.IsKeyDown(Keys.Right))
                 position.X += moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -160,7 +183,9 @@ namespace PTM
             foreach (Krawedz k in listaKrawedzi)
             {
                 spriteBatch.Draw(podlogaTexture, k.prostokat, Color.White);
-                if (k.prostokat.Y > maxPosition.Y + 1000)
+                if (k.zepsuty == true)
+                    spriteBatch.DrawString(font, "You shall not pass!", new Vector2(k.prostokat.X,k.prostokat.Y), Color.White);
+                if (k.prostokat.Y > maxPosition.Y + 500)
                     listaKrawedziDoUsuniecia.Add(k);
             }
             
@@ -180,6 +205,14 @@ namespace PTM
             if (koniecGry == true)
             {
                 spriteBatch.DrawString(font, "Koniec gry", (maxPosition + new Vector2(0, -300)), Color.Yellow);
+                // Compose a string that consists of three lines.
+                string lines = wynik.ToString();
+
+                // Write the string to a file.
+                System.IO.StreamWriter file = new System.IO.StreamWriter("test.txt");
+                file.WriteLine(lines);
+
+                file.Close();
             }
 
         }
