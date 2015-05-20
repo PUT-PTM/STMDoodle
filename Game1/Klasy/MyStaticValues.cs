@@ -6,8 +6,8 @@
         public static double wersja = 0.41;
         public class WinSize
         {
-            public static int X = 1300;
-            public static int Y = 700;
+            public static int X = 1024;
+            public static int Y = 600;
         }
     }
 }

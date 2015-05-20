@@ -34,16 +34,16 @@ namespace PTM
         {
             spriteBatch.DrawString(font, "STM DOODLE " + MyStaticValues.wersja.ToString().Replace(',','.'), 
                 new Vector2(MyStaticValues.WinSize.X / 2 - (int)font.MeasureString("STM Doodle x.xx").X / 2,
-                    MyStaticValues.WinSize.Y / 2 - (int)font.MeasureString("STM Doodle").Y / 2), Color.Cyan);
+                    MyStaticValues.WinSize.Y / 2 - (int)font.MeasureString("STM Doodle").Y / 2), Color.White);
             spriteBatch.DrawString(font, "To Play Press Enter",
                 new Vector2(MyStaticValues.WinSize.X / 2 - (int)font.MeasureString("To Play Press Enter").X / 2,
-                    MyStaticValues.WinSize.Y / 2 + 100 - (int)font.MeasureString("To Play Press Enter").Y / 2), Color.YellowGreen);
+                    MyStaticValues.WinSize.Y / 2 + 100 - (int)font.MeasureString("To Play Press Enter").Y / 2), Color.DarkGreen);
             spriteBatch.DrawString(font, "Piotr Nowak\nDamian Rusin",
                 new Vector2(MyStaticValues.WinSize.X / 2 - (int)font.MeasureString("Piotr Nowak").X / 2,
-                    MyStaticValues.WinSize.Y / 2 + 200 - (int)font.MeasureString("Piotr Nowak").Y / 2), Color.PapayaWhip);
+                    MyStaticValues.WinSize.Y / 2 + 200 - (int)font.MeasureString("Piotr Nowak").Y / 2), Color.SeaShell);
             spriteBatch.DrawString(font, "2015",
                 new Vector2(MyStaticValues.WinSize.X / 2 - (int)font.MeasureString("Piotr Nowak").X / 2,
-                    MyStaticValues.WinSize.Y / 2 + 275 - (int)font.MeasureString("Piotr Nowak").Y / 2), Color.PapayaWhip);
+                    MyStaticValues.WinSize.Y / 2 + 275 - (int)font.MeasureString("Piotr Nowak").Y / 2), Color.SeaShell);
             base.Draw(spriteBatch);
         }
     }

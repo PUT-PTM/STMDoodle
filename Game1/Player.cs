@@ -11,7 +11,6 @@ namespace PTM
     {
         #region Variables
         Rectangle podloga = new Rectangle(0, MyStaticValues.WinSize.Y - 16, MyStaticValues.WinSize.X, 16);
-        public int Wynik { get { return wynik; } }
         int poprzednieX = 0;
         int poprzednieWidth = 0;
         Coin badanyCoin;
@@ -47,11 +46,15 @@ namespace PTM
         bool opadanie = false;
         bool inter = false;
 
-        
+
+        int totalWynik;
         int wynik = 0;
         string czas = "0";
+
+        Texture2D Bground;
         #endregion
         #region Properties
+        public int Wynik { get { return totalWynik; } }
         public bool Koniecgry
         { 
             get { return koniecGry; } 
@@ -80,7 +83,7 @@ namespace PTM
                 listaCoinow.Add(c);   
             }
             
-            position = new Vector2((MyStaticValues.WinSize.X - 200), (MyStaticValues.WinSize.Y - 200));
+            position = new Vector2(((MyStaticValues.WinSize.X - gracz.FrameWidth)/2), (MyStaticValues.WinSize.Y - gracz.FrameHeight));
             velocity = Vector2.Zero;
 
             coin = new Rectangle(100, 100, 16, 16);
@@ -94,6 +97,7 @@ namespace PTM
             font = content.Load<SpriteFont>("SpriteFont1");
             podlogaTexture = content.Load<Texture2D>("Sprites/podloga");
             coinTexture = content.Load<Texture2D>("Sprites/coin");
+            Bground = content.Load<Texture2D>("Sprites/BabaArena");
             //song = content.Load<Song>("Audio/veridisquo");
             //MediaPlayer.Play(song);
             gracz.LoadContent(content, playerSprite, "", position);
@@ -105,13 +109,16 @@ namespace PTM
             #region Ruchome krawędzie
             foreach (Krawedz k in listaKrawedzi)
             {
+                Vector2 kr = new Vector2(0,k.prostokat.Y);
                 if (k.ruchoma == true && k.kierunek == "prawo")
                 {
-                    k.prostokat.X += 10;
+                    kr.X = 500 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    k.prostokat.X += (int)kr.X;
                 }
                 if (k.ruchoma == true && k.kierunek == "lewo")
                 {
-                    k.prostokat.X -= 10;
+                    kr.X = 500 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    k.prostokat.X -= (int)kr.X;
                 }
                 if (k.prostokat.X > MyStaticValues.WinSize.X - k.prostokat.Width)
                 {
@@ -133,11 +140,8 @@ namespace PTM
                 {
                     koniecGry = true;
                 }
-
-            if (positionBefore.Y > position.Y)
-                gracz.CurrentFrame = new Vector2(gracz.CurrentFrame.X, 2);
-            else
-                gracz.CurrentFrame = new Vector2(gracz.CurrentFrame.X, 3);
+            totalWynik = (int)((maxPosition.Y - 2 * maxPosition.Y) / 100) + wynik;
+           
 
             positionBefore = position;
             keyState = Keyboard.GetState();
@@ -149,24 +153,32 @@ namespace PTM
             if (keyState.IsKeyDown(Keys.Enter) || keyState.IsKeyDown(Keys.Space))
                 ScreenManager.Instance.AddScreen(new PlayScreen());
             gracz.IsActive = true;
+            if (opadanie)
+            {
+                gracz.CurrentFrame = new Vector2(gracz.CurrentFrame.X, 2);
+            }
+            else
+            {
+                gracz.CurrentFrame = new Vector2(gracz.CurrentFrame.X, 0);
+            }
             if (keyState.IsKeyDown(Keys.Right))
             {
-                gracz.CurrentFrame = new Vector2(gracz.CurrentFrame.X, 1);
+                gracz.CurrentFrame = new Vector2(0,gracz.CurrentFrame.Y);
                 position.X += moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
             else if (keyState.IsKeyDown(Keys.Left))
             {
-                gracz.CurrentFrame = new Vector2(gracz.CurrentFrame.X, 0);
+                gracz.CurrentFrame = new Vector2(1, gracz.CurrentFrame.Y);
                 position.X -= moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
-            else
-                gracz.IsActive = false;
             if (jump)
             {
+                gracz.CurrentFrame = new Vector2(gracz.CurrentFrame.X, 1);
                 velocity = Vector2.Zero;
                 velocity.Y -= jumpSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 jump = false;
             }
+
             if (!jump)
                 velocity.Y += gravity * (float)gameTime.ElapsedGameTime.TotalSeconds;
             else
@@ -185,6 +197,7 @@ namespace PTM
             
             
             
+            
             #region colision
             CheckBorders();
 
@@ -192,6 +205,7 @@ namespace PTM
             {
                 if (playerRect.Intersects(k.prostokat) && opadanie)
                 {
+                    gracz.CurrentFrame = new Vector2(gracz.CurrentFrame.X, 1);
                     position.Y = k.prostokat.Y - gracz.FrameHeight;
                     inter = true;
                     jump = true;
@@ -268,7 +282,8 @@ namespace PTM
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(coinTexture, coin, Color.White);
+            spriteBatch.Draw(Bground, new Vector2(0, -1024 + MyStaticValues.WinSize.Y), Color.White);
+            //spriteBatch.Draw(coinTexture, coin, Color.White);
 
             foreach (Coin c in listaCoinow)
             {
@@ -283,23 +298,12 @@ namespace PTM
                 if (k.prostokat.Y > maxPosition.Y + 500)
                     listaKrawedziDoUsuniecia.Add(k);
             }
-
+            
             spriteBatch.Draw(podlogaTexture, podloga, Color.White);
             gracz.Draw(spriteBatch);
             //spriteBatch.Draw(playerSprite, position, Color.White);
-            spriteBatch.DrawString(font,
-                MyStaticValues.nazwa + " " +
-                MyStaticValues.wersja.ToString().Replace(',', '.') + "\nX: " +
-                position.X.ToString() + " Y: " +
-                position.Y.ToString() +
-                "\nJump: " + jump.ToString() +
-                " Up: " + keyState.IsKeyDown(Keys.Up).ToString() +
-                "\nWynik: " + (((maxPosition.Y - 2*maxPosition.Y)/100) + wynik).ToString() +
-                "\nIloscCoinow: " + iloscCoinow.ToString() +
-                "\nCzas: " + czas.ToString() +
-                "\nOpadanie: " + opadanie.ToString() +
-                "\nIntersect: " + inter.ToString() +
-                "\nKoniec: " + koniecGry.ToString(), maxPosition + new Vector2(0, - 100), Color.White);
+            
+            /*
             if (koniecGry == true)
             {
                 spriteBatch.DrawString(font, "Koniec gry", (maxPosition + new Vector2(0, -300)), Color.Yellow);
@@ -311,8 +315,22 @@ namespace PTM
                 // file.WriteLine(lines);
 
                 //file.Close();
-            }
-
+            }*/
+            spriteBatch.End();
+            spriteBatch.Begin();
+            spriteBatch.DrawString(font,
+                MyStaticValues.nazwa + " " +
+                MyStaticValues.wersja.ToString().Replace(',', '.') + "\nX: " +
+                position.X.ToString() + " Y: " +
+                position.Y.ToString() +
+                "\nJump: " + jump.ToString() +
+                "\nWynik: " + ((int)(((maxPosition.Y - 2 * maxPosition.Y) / 100) + wynik)).ToString() +
+                "\nIloscCoinow: " + iloscCoinow.ToString() +
+                "\nCzas: " + czas.ToString() +
+                "\nOpadanie: " + opadanie.ToString() +
+                "\nKoniec: " + koniecGry.ToString(), Vector2.Zero, Color.White);
+            spriteBatch.End();
+            spriteBatch.Begin();
         }
 
         private void CheckBorders()

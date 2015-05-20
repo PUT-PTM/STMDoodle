@@ -42,7 +42,7 @@ namespace PTM
         }
         public int FrameHeight
         {
-            get { return image.Width / (int)frames.X; }
+            get { return image.Height / (int)frames.Y; }
         }
         public override float Alpha
         {
@@ -60,7 +60,7 @@ namespace PTM
             base.LoadContent(Content, image, text, position);
             frameCounter = 0;
             switchFrame = 100;
-            frames = new Vector2(1, 4);///do zmiany
+            frames = new Vector2(2, 3);///do zmiany
             currentFrame = new Vector2(0,0);                       
         }
         public override void UnloadContent()
@@ -68,7 +68,7 @@ namespace PTM
             base.UnloadContent();
         }
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
-        {
+        {/*
             if(isActive)
             {
                 frameCounter += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
@@ -87,7 +87,7 @@ namespace PTM
             {
                 frameCounter = 0;
             }
-
+            */
             sourceRect = new Rectangle((int)currentFrame.X * FrameWidth, (int)currentFrame.Y * FrameHeight,
                 FrameWidth, FrameHeight);
         }

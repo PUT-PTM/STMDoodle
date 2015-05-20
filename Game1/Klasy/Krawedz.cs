@@ -26,10 +26,17 @@ namespace PTM
             }
             int X;
             X = Program.Losowaczka.Next(MyStaticValues.WinSize.X - szerokosc);
+            if(X > poprzednieX)
             while (Math.Abs(X - poprzednieX - poprzednieWidth) > 400)
             {
                 X = Program.Losowaczka.Next(MyStaticValues.WinSize.X - szerokosc);
             }
+            else
+                while (Math.Abs(X + szerokosc - poprzednieX) > 400)
+                {
+                    X = Program.Losowaczka.Next(MyStaticValues.WinSize.X - szerokosc);
+                }
+
             this.prostokat = new Rectangle(X, 0, szerokosc, wysokosc);
         }
     }

@@ -15,7 +15,7 @@ namespace PTM
         public void Update(Vector2 playerPosition)
         {
             prevPosition = position;
-            position.Y = playerPosition.Y - (MyStaticValues.WinSize.Y / 2);
+            position.Y = playerPosition.Y +105 - (MyStaticValues.WinSize.Y / 2);
             position.X = 0;
             
             if (prevPosition.Y < position.Y)

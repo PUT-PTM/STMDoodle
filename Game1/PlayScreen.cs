@@ -43,11 +43,14 @@ namespace PTM
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend,
                 null, null, null, null, camera.ViewMatrix);
-
             player.Draw(spriteBatch);
 
 
             base.Draw(spriteBatch);
+            spriteBatch.End();
+            spriteBatch.Begin();
+            spriteBatch.DrawString(font, "Wynik: " + player.Wynik.ToString(), new Vector2(
+                MyStaticValues.WinSize.X / 2 - (int)font.MeasureString("Wynik: " + player.Wynik.ToString()).X/2, 0), Color.White);
             spriteBatch.End();
             spriteBatch.Begin();
         }
