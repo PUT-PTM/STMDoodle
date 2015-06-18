@@ -9,10 +9,10 @@ namespace PTM
 {
     class ScoreScreen : GameScreen
     {
-        PTM.Klasy.KbHandler klawa = new PTM.Klasy.KbHandler();
+        Wynik wynikKlasa;
+        List<Wynik> listaWynikow = new List<Wynik>();
         KeyboardState keyState;
         SpriteFont font;
-        List<string> listaWynikow = new List<string>();
         string test;
         int wynik;
         StreamReader reader;
@@ -27,7 +27,7 @@ namespace PTM
         public override void Initialize()
         {
             base.Initialize();
-            try
+           /* try
             {
                 reader = new StreamReader("test.txt");
             }
@@ -45,13 +45,20 @@ namespace PTM
             for (int i = 0; i < 10; i++)
             {
                 test = reader.ReadLine();
-                listaWynikow.Add(test);
+                wynikKlasa = new Wynik("Nowaczek", wynik);
+                listaWynikow.Add(wynikKlasa);
             }
             reader.Close();
-
-            string name = "Nowaczek";
+            string name = "STM";
+            StreamWriter sr = new StreamWriter("test.txt");
+            listaWynikow[0].nazwa = name;
+            listaWynikow[0].wynik = wynik;
+            foreach (Wynik w in listaWynikow)
+            {
+                sr.WriteLine(w.nazwa + " " + w.wynik);
+            }
             
-            File.AppendAllText("test.txt", "\n" + name + " " + wynik);
+            //File.AppendAllText("test.txt", "\n" + name + " " + wynik);*/
         }
         public override void LoadContent(ContentManager Content)
         {
@@ -68,7 +75,6 @@ namespace PTM
             keyState = Keyboard.GetState();
             if (keyState.IsKeyDown(Keys.Enter) || keyState.IsKeyDown(Keys.Space))
                 ScreenManager.Instance.AddScreen(new TitleScreen());
-            klawa.Update();
 
             var keyboardState = Keyboard.GetState();
             var keys = keyboardState.GetPressedKeys();
@@ -83,16 +89,17 @@ namespace PTM
         {
             int position = 0;
             int miejsce = 1;
-            foreach (string s in listaWynikow)
+
+           /* foreach (Wynik w in listaWynikow)
             {
-                spriteBatch.DrawString(font, miejsce + ". " + s, new Vector2(0, position), Color.Black);
-                position += 30;
+                spriteBatch.DrawString(font, miejsce + ". " + w.nazwa + w.wynik, new Vector2(0, position * 20) , Color.DarkBlue);
+                position++;
                 miejsce++;
-            }
+            }*/
             spriteBatch.DrawString(font, "Wynik: " + wynik,
                 new Vector2(MyStaticValues.WinSize.X / 2 - (int)font.MeasureString("Wynik: " + wynik).X / 2,
                     MyStaticValues.WinSize.Y / 2 - (int)font.MeasureString("Wynik: " + wynik).Y / 2), Color.DarkBlue);
-            //spriteBatch.DrawString(font, _stringValue, new Vector2(0,200), Color.White);
+           // spriteBatch.DrawString(font, _stringValue, new Vector2(0,200), Color.White);
             spriteBatch.DrawString(font, "To Continue Press Enter",
                 new Vector2(MyStaticValues.WinSize.X / 2 - (int)font.MeasureString("To Continue Press Enter").X / 2,
                     MyStaticValues.WinSize.Y / 2 + 100 - (int)font.MeasureString("To Continue Press Enter").Y / 2), Color.Black);

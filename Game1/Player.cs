@@ -4,11 +4,22 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using System.Collections.Generic;
+using System.IO.Ports;
+using System.Threading;
 
 namespace PTM
 {
     class Player
     {
+        
+        static int kierunek;
+        int licznik = 0;
+        Thread watek = new Thread(new ThreadStart(watekAkcelerometr));
+
+
+
+
+
         #region Variables
         Rectangle podloga = new Rectangle(0, MyStaticValues.WinSize.Y - 16, MyStaticValues.WinSize.X, 16);
         int poprzednieX = 0;
@@ -22,7 +33,7 @@ namespace PTM
         bool koniecGry = false;
         int dlugoscListy;
         Krawedz badanaKrawedz;
-        //Song song;
+        Song song;
         int iloscCoinow = 0;
         List<Coin> listaCoinow = new List<Coin>();
         List<Coin> listaCoinowDoUsuniecia = new List<Coin>();
@@ -56,19 +67,22 @@ namespace PTM
         #region Properties
         public int Wynik { get { return totalWynik; } }
         public bool Koniecgry
-        { 
-            get { return koniecGry; } 
+        {
+            get { return koniecGry; }
         }
         public Vector2 Position
         {
             get { return position; }
-        } 
+        }
         public bool Opada
         { get { return opadanie; } }
         #endregion
-        
+
         public void Initialize()
         {
+
+            
+
             for (int i = 0; i < 600; i++)
             {
                 Krawedz k = new Krawedz(poprzednieX, poprzednieWidth);
@@ -80,36 +94,59 @@ namespace PTM
             for (int i = 0; i < 100; i++)
             {
                 Coin c = new Coin();
-                listaCoinow.Add(c);   
+                listaCoinow.Add(c);
             }
-            
-            position = new Vector2(((MyStaticValues.WinSize.X - gracz.FrameWidth)/2), (MyStaticValues.WinSize.Y - gracz.FrameHeight));
+
+            position = new Vector2(((MyStaticValues.WinSize.X - gracz.FrameWidth) / 2), (MyStaticValues.WinSize.Y - gracz.FrameHeight));
             velocity = Vector2.Zero;
 
             coin = new Rectangle(100, 100, 16, 16);
+
+            //watek.Start();
+
         }
 
         public void LoadContent(ContentManager Content)
         {
-            
+            //sPort.DataReceived += sPort_DataReceived;
             content = new ContentManager(Content.ServiceProvider, "Content");
             playerSprite = content.Load<Texture2D>("Sprites/Sprite");
-            font = content.Load<SpriteFont>("SpriteFont1");
+            font = content.Load<SpriteFont>("font1");
             podlogaTexture = content.Load<Texture2D>("Sprites/podloga");
             coinTexture = content.Load<Texture2D>("Sprites/coin");
             Bground = content.Load<Texture2D>("Sprites/BabaArena");
-            //song = content.Load<Song>("Audio/veridisquo");
-            //MediaPlayer.Play(song);
+            song = content.Load<Song>("Audio/veridisquo");
+            MediaPlayer.Play(song);
+            MediaPlayer.Volume = 0.1f;
             gracz.LoadContent(content, playerSprite, "", position);
-            
+
+
+
         }
+
+
 
         public void Update(GameTime gameTime)
         {
+            //if(Program.sPort.BytesToRead  == 1 )
+            //{
+            //    int data = (int)Program.sPort.ReadByte();
+            //    //string trash = sPort.ReadExisting();
+            //    if (data >= 128)
+            //        data -= 255;
+            //    kierunek = data;
+            //}else
+            //    if (Program.sPort.BytesToRead > 1)
+            //{
+
+            //    string trash = Program.sPort.ReadExisting();
+                
+            //}
+
             #region Ruchome krawędzie
             foreach (Krawedz k in listaKrawedzi)
             {
-                Vector2 kr = new Vector2(0,k.prostokat.Y);
+                Vector2 kr = new Vector2(0, k.prostokat.Y);
                 if (k.ruchoma == true && k.kierunek == "prawo")
                 {
                     kr.X = 500 * (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -124,14 +161,14 @@ namespace PTM
                 {
                     k.kierunek = "lewo";
                 }
-                if ( k.prostokat.X < 0)
+                if (k.prostokat.X < 0)
                 {
                     k.kierunek = "prawo";
                 }
             }
             #endregion
             if (position.Y < maxPosition.Y)
-            { 
+            {
                 maxPosition = position;
                 maxPosition.X = 0;
             }
@@ -141,7 +178,11 @@ namespace PTM
                     koniecGry = true;
                 }
             totalWynik = (int)((maxPosition.Y - 2 * maxPosition.Y) / 100) + wynik;
-           
+
+
+            //string test;
+
+            //sport.DataReceived() += test;
 
             positionBefore = position;
             keyState = Keyboard.GetState();
@@ -161,15 +202,15 @@ namespace PTM
             {
                 gracz.CurrentFrame = new Vector2(gracz.CurrentFrame.X, 0);
             }
-            if (keyState.IsKeyDown(Keys.Right))
+            if (kierunek > 0)
             {
-                gracz.CurrentFrame = new Vector2(0,gracz.CurrentFrame.Y);
-                position.X += moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                gracz.CurrentFrame = new Vector2(0, gracz.CurrentFrame.Y);
+                position.X += moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds * kierunek/48;
             }
-            else if (keyState.IsKeyDown(Keys.Left))
+            else if (kierunek < 0)
             {
                 gracz.CurrentFrame = new Vector2(1, gracz.CurrentFrame.Y);
-                position.X -= moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                position.X += moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds * kierunek/48;
             }
             if (jump)
             {
@@ -189,15 +230,15 @@ namespace PTM
             position += velocity;
 
 
-            if( position.Y >= MyStaticValues.WinSize.Y - gracz.FrameHeight)
+            if (position.Y >= MyStaticValues.WinSize.Y - gracz.FrameHeight)
             {
                 jump = true;
             }
             #endregion
-            
-            
-            
-            
+
+
+
+
             #region colision
             CheckBorders();
 
@@ -278,7 +319,17 @@ namespace PTM
             gracz.Update(gameTime);
             playerRect = new Rectangle((int)position.X, (int)position.Y, gracz.FrameWidth, gracz.FrameHeight);
             gracz.IsActive = false;
+/*
+            if (licznik == 30)
+            {
+                updateKierunek();
+                licznik = 0;
+            }
+            else
+                licznik++;*/
         }
+
+
 
         public void Draw(SpriteBatch spriteBatch)
         {
@@ -298,11 +349,11 @@ namespace PTM
                 if (k.prostokat.Y > maxPosition.Y + 500)
                     listaKrawedziDoUsuniecia.Add(k);
             }
-            
+
             spriteBatch.Draw(podlogaTexture, podloga, Color.White);
             gracz.Draw(spriteBatch);
             //spriteBatch.Draw(playerSprite, position, Color.White);
-            
+
             /*
             if (koniecGry == true)
             {
@@ -316,19 +367,22 @@ namespace PTM
 
                 //file.Close();
             }*/
+            spriteBatch.DrawString(font, "Daft Punk - Veridis Quo", new Vector2(
+               (MyStaticValues.WinSize.X - (int)font.MeasureString("Daft Punk - Veridis Quo").X - 10),
+               (MyStaticValues.WinSize.Y - (int)font.MeasureString("Daft Punk - Veridis Quo").Y - 20)), Color.Black);
             spriteBatch.End();
             spriteBatch.Begin();
-            spriteBatch.DrawString(font,
+            /*spriteBatch.DrawString(font,
                 MyStaticValues.nazwa + " " +
                 MyStaticValues.wersja.ToString().Replace(',', '.') + "\nX: " +
                 position.X.ToString() + " Y: " +
                 position.Y.ToString() +
-                "\nJump: " + jump.ToString() +
+                "\nKierunek: " + kierunek.ToString() +
                 "\nWynik: " + ((int)(((maxPosition.Y - 2 * maxPosition.Y) / 100) + wynik)).ToString() +
                 "\nIloscCoinow: " + iloscCoinow.ToString() +
                 "\nCzas: " + czas.ToString() +
                 "\nOpadanie: " + opadanie.ToString() +
-                "\nKoniec: " + koniecGry.ToString(), Vector2.Zero, Color.White);
+                "\nKoniec: " + koniecGry.ToString(), Vector2.Zero, Color.White);*/
             spriteBatch.End();
             spriteBatch.Begin();
         }
@@ -344,6 +398,33 @@ namespace PTM
             if (positionBefore.Y < position.Y)
                 opadanie = true;
             else opadanie = false;
-            }
+        }
+
+        private void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
+        {
+            SerialPort sport = (SerialPort)sender;
+            //string indata = sport.ReadExisting();
+            int data = (int)sport.ReadByte();
+            string trash = sport.ReadExisting();
+            if (data >= 128)
+                data -= 255;
+            kierunek = data;
+        }
+
+
+        static void updateKierunek()
+        {
+            int data = (int)Program.sPort.ReadByte();
+            string trash = Program.sPort.ReadExisting();
+            if (data >= 128)
+                data -= 255;
+            kierunek = data;
+        }
+
+       static void watekAkcelerometr()
+        {
+           while (true)
+            updateKierunek();
+        }
     }
 }

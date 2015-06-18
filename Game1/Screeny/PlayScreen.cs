@@ -51,6 +51,7 @@ namespace PTM
             spriteBatch.Begin();
             spriteBatch.DrawString(font, "Wynik: " + player.Wynik.ToString(), new Vector2(
                 MyStaticValues.WinSize.X / 2 - (int)font.MeasureString("Wynik: " + player.Wynik.ToString()).X/2, 0), Color.White);
+            
             spriteBatch.End();
             spriteBatch.Begin();
         }

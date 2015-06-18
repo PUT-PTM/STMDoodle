@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
 
 
 namespace PTM
 {
     public class PlayerAnimation : Animation
     {
-        int frameCounter;
-        int switchFrame;
+        //int frameCounter;
+        //int switchFrame;
 
         Vector2 frames;
         Vector2 currentFrame;
@@ -58,8 +52,8 @@ namespace PTM
         public override void LoadContent(Microsoft.Xna.Framework.Content.ContentManager Content, Microsoft.Xna.Framework.Graphics.Texture2D image, string text, Microsoft.Xna.Framework.Vector2 position)
         {
             base.LoadContent(Content, image, text, position);
-            frameCounter = 0;
-            switchFrame = 100;
+            //frameCounter = 0;
+            //switchFrame = 100;
             frames = new Vector2(2, 3);///do zmiany
             currentFrame = new Vector2(0,0);                       
         }
