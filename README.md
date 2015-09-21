@@ -13,8 +13,8 @@ STM32 binary file is in "bin" folder.
 No future improvements are planned
 #Attributions
 Graphics: Dragon Ball: Advanced Adventure (GBA)
-#Music: Daft Punk - Veridis Quo
-#Virtual Port Com: https://github.com/xenovacivus/STM32DiscoveryVCP
+Music: Daft Punk - Veridis Quo
+Virtual Port Com: https://github.com/xenovacivus/STM32DiscoveryVCP
 #License
 MIT License
 #Credits
