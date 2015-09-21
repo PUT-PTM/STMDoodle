@@ -102,7 +102,7 @@ namespace PTM
 
             coin = new Rectangle(100, 100, 16, 16);
 
-            //watek.Start();
+            watek.Start();
 
         }
 
@@ -140,7 +140,7 @@ namespace PTM
             //{
 
             //    string trash = Program.sPort.ReadExisting();
-                
+
             //}
 
             #region Ruchome krawędzie

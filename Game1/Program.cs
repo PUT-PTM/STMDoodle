@@ -19,7 +19,7 @@ namespace PTM
         [STAThread]
         static void Main()
         {
-            //sPort.Open();
+            sPort.Open();
             using (var game = new STMDoodle())
 
                 game.Run();

@@ -3,7 +3,7 @@
     class MyStaticValues
     {
         public static string nazwa = "STMDoodle";
-        public static string wersja = "0.61a";
+        public static string wersja = "1.00";
         public class WinSize
         {
             public static int X = 1024;
